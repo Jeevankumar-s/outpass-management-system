@@ -26,20 +26,25 @@ class LoginForm extends Component {
     const {history} = this.props
 
     try {
-      const res = await axios.post('http://localhost:3304/login', {
+      const res = await axios.post('http://localhost:3000/login', {
         username,
         password,
       })
+      console.log(res)
 
       if (res.data.validation) {
-        this.setState({showSubmitError: false})
-        Cookies.set('jwt_token', res.data.token)
-        history.push('/')
+        if (res.data.type === 'student') {
+          this.setState({showSubmitError: false})
+          Cookies.set('jwt_token', res.data.token)
+          history.push('/')
+        } else {
+          history.push('/history')
+        }
       } else {
         this.setState({showSubmitError: true, errorMsg: res.data.Error})
       }
     } catch (error) {
-      console.error('Login error:', error)
+      console.error('Login error:', error.message)
     }
   }
 

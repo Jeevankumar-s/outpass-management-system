@@ -1,0 +1,85 @@
+POST http://localhost:3000/register/
+Content-Type: application/json
+
+{
+    "username":"20104035",
+    "password":"27/02/2003",
+    "type":"student"
+}
+###
+POST http://localhost:3000/register/
+Content-Type: application/json
+
+{
+    "username":"20104039",
+    "password":"25/04/2003",
+    "type":"student"
+}
+###
+POST http://localhost:3000/register/
+Content-Type: application/json
+
+{
+    "username":"20104060",
+    "password":"01/01/2001",
+    "type":"student"
+}
+###
+POST http://localhost:3000/register/
+Content-Type: application/json
+
+{
+    "username":"sudha",
+    "password":"sudha",
+    "type":"staff"
+}
+###
+POST http://localhost:3000/register/
+Content-Type: application/json
+
+{
+    "username":"santhanalakshmi",
+    "password":"santhanalakshmi",
+    "type":"staff"
+}
+###
+POST http://localhost:3000/register/
+Content-Type: application/json
+
+{
+    "username":"poppy",
+    "password":"poppy",
+    "type":"staff"
+}
+###
+POST http://localhost:3000/login/
+Content-Type: application/json
+
+{
+    "username":"20104035",
+    "password":"27/02/2003"
+}
+###
+POST http://localhost:3000/login/
+Content-Type: application/json
+
+{
+    "username":"poppy",
+    "password":"poppy"
+}
+
+###
+post http://localhost:3000/outpass/
+Content-Type: application/json
+
+{
+    "registerNo":"20104035",
+    "name":"JEEVANKUMAR",
+    "email":"jeevenkumar2003@gmail.com",
+    "year":"IV",
+    "department":"CSE",
+    "reason":"FEVER"
+}
+
+###
+GET http://localhost:3000/history
