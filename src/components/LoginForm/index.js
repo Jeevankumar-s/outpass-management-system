@@ -1,7 +1,7 @@
 import {Component} from 'react'
 import Cookies from 'js-cookie'
 import axios from 'axios'
-
+import {withRouter} from 'react-router-dom'
 import './index.css'
 
 class LoginForm extends Component {
@@ -26,20 +26,28 @@ class LoginForm extends Component {
     const {history} = this.props
 
     try {
-      const res = await axios.post('http://localhost:3304/login', {
+      const res = await axios.post('http://localhost:3000/login', {
         username,
         password,
       })
+      console.log(res)
 
       if (res.data.validation) {
+        let userType = ''
+        if (res.data.type === 'student') {
+          userType = 'student'
+        } else if (res.data.type === 'staff') {
+          userType = 'staff'
+        }
+        history.push('/history', {username, userType})
         this.setState({showSubmitError: false})
         Cookies.set('jwt_token', res.data.token)
-        history.push('/')
+        // console.log(username, userType)
       } else {
         this.setState({showSubmitError: true, errorMsg: res.data.Error})
       }
     } catch (error) {
-      console.error('Login error:', error)
+      console.error('Login error:', error.message)
     }
   }
 
@@ -85,7 +93,7 @@ class LoginForm extends Component {
     return (
       <div className="login-form-container">
         <img
-          src="file:///c%3A/Users/jeeve/outpass-management-system/frontend/src/components/login/Login/Mobile-login-Cristina.jpg"
+          src="https://res.cloudinary.com/dprxsgnqn/image/upload/v1694320298/vc9ukp7bdnvkhkvzkn3n.jpg"
           className="login-image"
           alt="website login"
         />
@@ -109,4 +117,4 @@ class LoginForm extends Component {
   }
 }
 
-export default LoginForm
+export default withRouter(LoginForm)
