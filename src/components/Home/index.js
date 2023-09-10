@@ -18,6 +18,19 @@ class index extends Component {
     errorMsg: '',
   }
 
+  componentDidMount() {
+    const {location} = this.props
+    const {state} = location
+
+    if (state && state.userDetails) {
+      const {userDetails} = state
+      const {username, userType} = userDetails
+      // Now you have access to username and userType
+      console.log('Username:', username)
+      console.log('User Type:', userType)
+    }
+  }
+
   onChangeregisterNo = event => {
     this.setState({registerNo: event.target.value})
   }
@@ -66,7 +79,13 @@ class index extends Component {
       })
 
       if (res.data.submission) {
-        this.setState({showSubmitError: false, registerNo: ''})
+        this.setState({
+          showSubmitError: false,
+          registerNo: '',
+          name: '',
+          email: '',
+          reason: '',
+        })
         alert('Outpass Submitted Successfully')
         // Use this.props.history.push to navigate to the dashboard
       } else {
@@ -77,6 +96,12 @@ class index extends Component {
       console.error('Login error:', error.message)
       alert('server error')
     }
+  }
+
+  onClickLogout = () => {
+    Cookies.remove('jwt_token')
+    const {history} = this.props
+    history.replace('/login')
   }
 
   render() {
@@ -91,6 +116,12 @@ class index extends Component {
       showSubmitError,
       errorMsg,
     } = this.state
+    const {location} = this.props
+    const {state} = location
+    const userDetails = state && state.userDetails
+    const username = userDetails ? userDetails.username : ''
+    const userType = userDetails ? userDetails.userType : ''
+
     return (
       <div className="container-fluid">
         <div className="row flex-nowrap">
@@ -129,41 +160,30 @@ class index extends Component {
                 </li>
                 <li>
                   <Link
-                    to="/history"
-                    href="google.com"
+                    to={{
+                      pathname: '/history',
+                      state: {
+                        username,
+                        userType,
+                      },
+                    }}
                     className="nav-link px-0 align-middle text-white"
                   >
                     <i className="fs-4 bi-table"> </i>
                     <span className="ms-1 d-none d-sm-inline">History</span>
                   </Link>
                 </li>
-
-                {/* <li>
-                        <a href="#" className="nav-link px-0 align-middle text-white">
-                            <i className="fs-4 bi-people"></i> <span className="ms-1 d-none d-sm-inline">Customers</span> </a>
-                    </li> */}
               </ul>
               <hr />
               <div className="dropdown pb-4">
-                <button type="submit" className="btn btn-primary">
+                <button
+                  type="submit"
+                  onClick={this.onClickLogout}
+                  className="btn btn-primary"
+                >
                   Logout
                 </button>
               </div>
-              {/* <div className="dropdown pb-4">
-                    <a href="#" className="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="https://github.com/mdo.png" alt="hugenerd" width="30" height="30" className="rounded-circle" />
-                        <span className="d-none d-sm-inline mx-1">loser</span>
-                    </a>
-                    <ul className="dropdown-menu dropdown-menu-dark text-small shadow">
-                        <li><a className="dropdown-item" href="#">New project...</a></li>
-                        <li><a className="dropdown-item" href="#">Settings</a></li>
-                        <li><a className="dropdown-item" href="#">Profile</a></li>
-                        <li>
-                            <hr className="dropdown-divider" />
-                        </li>
-                        <li><a className="dropdown-item" href="#">Sign out</a></li>
-                    </ul>
-                </div> */}
             </div>
           </div>
           <div className="col p-0 m-0">
@@ -176,7 +196,7 @@ class index extends Component {
                   Register No
                 </label>
                 <input
-                  type="text"
+                  type="number"
                   value={registerNo}
                   onChange={this.onChangeregisterNo}
                   className="form-control"
@@ -262,19 +282,11 @@ class index extends Component {
                 </button>
               </div>
             </form>
-            <p>
-              {registerNo}
-              {name}
-              {email}
-              {year}
-              {department}
-              {reason}
-              {date}
-            </p>
           </div>
         </div>
       </div>
     )
   }
 }
+
 export default index

@@ -118,6 +118,19 @@ app.get('/history', async (request, response) => {
   const res = await db.all(query)
   response.send(res)
 })
+
+app.get('/history/:registerNo/', async (request, response) => {
+  const {registerNo} = request.params
+  const getOutpass = `
+    SELECT
+      *
+    FROM
+      outpass
+    WHERE
+      registerNo = ${registerNo};`
+  const result = await db.all(getOutpass)
+  response.send(result)
+})
 // Other endpoints (e.g., /student, /staff)...
 
 initializeDBAndServer()
