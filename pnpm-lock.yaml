@@ -17,6 +17,7 @@ specifiers:
   js-cookie: 2.2.1
   jsonwebtoken: 8.5.1
   lint-staged: 10.5.4
+  nodemailer: 6.9.5
   npm-run-all: 4.1.5
   prettier: 2.2.1
   react: 17.0.1
@@ -40,6 +41,7 @@ dependencies:
   date-fns: 2.30.0
   js-cookie: 2.2.1
   jsonwebtoken: 8.5.1
+  nodemailer: 6.9.5
   react: 17.0.1
   react-custom-sidebar: 1.0.6_2cbade3716fc29f08997b21f2c3ca3cc
   react-dom: 17.0.1_react@17.0.1
@@ -9046,6 +9048,11 @@ packages:
 
   /node-releases/2.0.13:
     resolution: {integrity: sha512-uYr7J37ae/ORWdZeQ1xxMJe3NtdmqMC/JZK+geofDrkLUApKRHPd18/TxtBOJ4A0/+uUIliorNrfYV6s1b02eQ==}
+
+  /nodemailer/6.9.5:
+    resolution: {integrity: sha512-/dmdWo62XjumuLc5+AYQZeiRj+PRR8y8qKtFCOyuOl1k/hckZd8durUUHs/ucKx6/8kN+wFxqKJlQ/LK/qR5FA==}
+    engines: {node: '>=6.0.0'}
+    dev: false
 
   /nopt/5.0.0:
     resolution: {integrity: sha512-Tbj67rffqceeLpcRXrT7vKAN8CwfPeIBgM7E6iBkmKLV7bEMwpGgYLGv0jACUsECaa/vuxP0IjEont6umdMgtQ==}
