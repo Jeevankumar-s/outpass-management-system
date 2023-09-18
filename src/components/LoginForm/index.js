@@ -42,11 +42,18 @@ class LoginForm extends Component {
         } else if (res.data.userType === 'staff') {
           user = 'staff'
         }
+<<<<<<< HEAD
 
         history.push('/history', {username, user})
         this.setState({showSubmitError: false})
         Cookies.set('jwt_token', res.data.jeevToken)
         // console.log(username, user)
+=======
+        history.push('/history', {username, userType})
+        this.setState({showSubmitError: false})
+        Cookies.set('jwt_token', res.data.token)
+        // console.log(username, userType)
+>>>>>>> a12484529c86c06cf5185faee8300e4a6915750a
       } else {
         this.setState({showSubmitError: true, errorMsg: res.data.Error})
       }
