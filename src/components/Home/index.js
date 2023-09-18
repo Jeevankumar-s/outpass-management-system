@@ -24,10 +24,10 @@ class index extends Component {
 
     if (state && state.userDetails) {
       const {userDetails} = state
-      const {username, userType} = userDetails
+      const {username, user} = userDetails
       // Now you have access to username and userType
       console.log('Username:', username)
-      console.log('User Type:', userType)
+      console.log('User Type:', user)
     }
   }
 
@@ -124,11 +124,15 @@ class index extends Component {
       showSubmitError,
       errorMsg,
     } = this.state
+    // const {location} = this.props
+    // const {state} = location
+    // const userDetails = state && state.userDetails
+    // const username = userDetails ? userDetails.username : ''
+    // const user = userDetails ? userDetails.user : ''
     const {location} = this.props
-    const {state} = location
-    const userDetails = state && state.userDetails
-    const username = userDetails ? userDetails.username : ''
-    const user = userDetails ? userDetails.user : ''
+    const {username, user} = location.state || {}
+    console.log('Location:', location)
+    // console.log(username, user)
 
     return (
       <div className="container-fluid">
@@ -183,6 +187,8 @@ class index extends Component {
                 </li>
               </ul>
               <hr />
+              <p>{username}</p>
+              <p>{user}</p>
               <div className="dropdown pb-4">
                 <button
                   type="submit"

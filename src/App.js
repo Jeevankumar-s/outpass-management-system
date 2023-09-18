@@ -13,9 +13,27 @@ const App = () => (
   <BrowserRouter>
     <Switch>
       <Route exact path="/login" component={LoginForm} />
-      <ProtectedRoute exact path="/" component={Home} />
-      <ProtectedRoute exact path="/outpassstatus" component={Outpassstatus} />
-      <ProtectedRoute exact path="/history" component={History} />
+      <ProtectedRoute
+        exact
+        path="/"
+        component={Home}
+        username="20104035"
+        user="student"
+      />
+      <ProtectedRoute
+        exact
+        path="/outpassstatus"
+        component={Outpassstatus}
+        username="20104035"
+        user="student"
+      />
+      <ProtectedRoute
+        exact
+        path="/history"
+        component={History}
+        username="20104035"
+        user="student"
+      />
       <Route path="/not-found" component={NotFound} />
       <Redirect to="not-found" />
     </Switch>
