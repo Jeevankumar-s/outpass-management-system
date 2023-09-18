@@ -131,6 +131,12 @@ app.get('/history/:registerNo/', async (request, response) => {
   const result = await db.all(getOutpass)
   response.send(result)
 })
+
+app.get('/outpass/:id/accept', async (request, response) => {
+  const {id} = request.params
+
+  response.send({success: true})
+})
 // Other endpoints (e.g., /student, /staff)...
 
 initializeDBAndServer()

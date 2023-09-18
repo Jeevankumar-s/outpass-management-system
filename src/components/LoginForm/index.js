@@ -26,23 +26,27 @@ class LoginForm extends Component {
     const {history} = this.props
 
     try {
-      const res = await axios.post('http://localhost:3000/login', {
-        username,
-        password,
-      })
+      const res = await axios.post(
+        'https://attractive-erin-ladybug.cyclic.cloud/login',
+        {
+          username,
+          password,
+        },
+      )
       console.log(res)
 
       if (res.data.validation) {
-        let userType = ''
-        if (res.data.type === 'student') {
-          userType = 'student'
-        } else if (res.data.type === 'staff') {
-          userType = 'staff'
+        let user = ''
+        if (res.data.userType === 'student') {
+          user = 'student'
+        } else if (res.data.userType === 'staff') {
+          user = 'staff'
         }
+
+        history.push('/history', {username, user})
         this.setState({showSubmitError: false})
-        Cookies.set('jwt_token', res.data.token)
-        history.push('/history', {username, userType})
-        // console.log(username, userType)
+        Cookies.set('jwt_token', res.data.jeevToken)
+        // console.log(username, user)
       } else {
         this.setState({showSubmitError: true, errorMsg: res.data.Error})
       }

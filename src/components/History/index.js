@@ -5,8 +5,17 @@ import {Link} from 'react-router-dom'
 import {Component} from 'react'
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import nodemailer from 'nodemailer'
 
 class index extends Component {
+  transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+      user: 'paavaioutpass@gmail.com', // Replace with your actual email address
+      pass: 'paavaioutpass123', // Replace with your email password
+    },
+  })
+
   constructor() {
     super()
     this.state = {
@@ -41,7 +50,46 @@ class index extends Component {
   }
 
   handleAccept = id => {
-    alert(String(id))
+    // Make an API call to accept the outpass with the given ID
+    axios
+      .get(`http://localhost:3000/outpass/${id}/accept`)
+      .then(response => {
+        if (response.data.success) {
+          const mainID = 'MAIN-123456-JohnDoe-1631234567890' // Replace with the generated main ID
+          const studentEmail = 'jeevenkumar2003@gmail.com' // Replace with the student's email
+
+          // Send an email
+          this.sendEmail(studentEmail)
+
+          alert(`Accepted outpass with ID: ${id}`)
+          // You may want to update your state to reflect the accepted outpass
+        } else {
+          // Handle the case where the API request was successful but the outpass was not accepted
+          alert(`Failed to accept outpass with ID: ${id}`)
+        }
+      })
+      .catch(error => {
+        // Handle any errors that occur during the API request
+        console.error('Error accepting outpass:', error)
+        alert(`An error occurred while accepting outpass with ID: ${id}`)
+      })
+  }
+
+  sendEmail = async (toEmail, subject, text) => {
+    try {
+      // Send email
+      const info = await this.transporter.sendMail({
+        from: 'paavaioutpass@gmail.com', // Replace with your actual email address
+        to: 'pjeevs23@gmail.com',
+        subject: 'Outpass Approved',
+        text: 'Your outpass has been approved',
+      })
+      alert('email sent successfully')
+      console.log('Email sent:', info.response)
+    } catch (error) {
+      alert('cant send email')
+      console.error('Email sending error:', error)
+    }
   }
 
   handleDecline = id => {
@@ -94,7 +142,6 @@ class index extends Component {
                 <li>
                   <Link
                     to="/history"
-                    href="google.com"
                     className="nav-link px-0 align-middle text-white"
                   >
                     <i className="fs-4 bi-table"> </i>
