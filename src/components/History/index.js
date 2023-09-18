@@ -25,12 +25,13 @@ class index extends Component {
   }
 
   componentDidMount() {
-    const {location: {state: {username, userType} = {}} = {}} = this.props
-    console.log(`http://localhost:3000/history/${username}`)
+    const {location: {state: {username, user} = {}} = {}} = this.props
+    console.log(username, user)
+
     const apiUrl =
-      userType === 'student'
-        ? `http://localhost:3000/history/${username}`
-        : 'http://localhost:3000/history'
+      user === 'student'
+        ? `https://attractive-erin-ladybug.cyclic.cloud/history/${username}`
+        : 'https://attractive-erin-ladybug.cyclic.cloud/history'
 
     fetch(apiUrl)
       .then(response => {
@@ -40,7 +41,7 @@ class index extends Component {
         return response.json()
       })
       .then(data => {
-        if (userType === 'student') {
+        if (user === 'student') {
           this.setState({studentOutpassData: data})
         } else {
           this.setState({outpassData: data})
@@ -101,7 +102,7 @@ class index extends Component {
 
   render() {
     const {location} = this.props
-    const {username, userType} = location.state || {}
+    const {username, user} = location.state || {}
     const {outpassData, studentOutpassData} = this.state
     return (
       <div className="container-fluid">
@@ -157,7 +158,7 @@ class index extends Component {
               <hr />
               <div className="dropdown pb-4">
                 <p>{username}</p>
-                <p>{userType}</p>
+                <p>{user}</p>
 
                 {/* <p>userType</p> */}
                 <button type="submit" className="btn btn-primary">
@@ -186,7 +187,7 @@ class index extends Component {
               <h4 className="text-center">History</h4>
               <div className="container">
                 <>
-                  {userType === 'staff' ? (
+                  {user === 'staff' ? (
                     <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3">
                       {outpassData.map(item => (
                         <div key={item.id} className="col mb-4">
@@ -194,13 +195,16 @@ class index extends Component {
                             <div className="card-body">
                               <h3 className="card-title">{item.name}</h3>
                               <p className="card-text">
-                                Registration No: {item.registerNo}
+                                Register No: {item.registernumber}
                               </p>
                               <p className="card-text">Email: {item.email}</p>
                               <p className="card-text">
                                 Department: {item.department}
                               </p>
                               <p className="card-text">Year: {item.year}</p>
+                              <p className="card-text">
+                                Requested Time: {item.current_datetime}
+                              </p>
                               <p className="card-text">Reason: {item.reason}</p>
                               <button
                                 onClick={() => this.handleAccept(item.id)}
@@ -227,13 +231,17 @@ class index extends Component {
                             <div className="card-body">
                               <h3 className="card-title">{item.name}</h3>
                               <p className="card-text">
-                                Registration No: {item.registerNo}
+                                Register No: {item.registernumber}
                               </p>
                               <p className="card-text">Email: {item.email}</p>
                               <p className="card-text">
                                 Department: {item.department}
                               </p>
                               <p className="card-text">Year: {item.year}</p>
+                              <p className="card-text">
+                                Requested Time: {item.current_datetime}
+                              </p>
+
                               <p className="card-text">Reason: {item.reason}</p>
                             </div>
                           </div>

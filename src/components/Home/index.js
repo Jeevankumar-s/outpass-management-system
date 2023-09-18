@@ -7,13 +7,13 @@ import Cookies from 'js-cookie'
 
 class index extends Component {
   state = {
-    registerNo: '',
+    registernumber: '',
     name: '',
     email: '',
     year: '',
     department: '',
     reason: '',
-    date: '',
+    semester: '',
     showSubmitError: false,
     errorMsg: '',
   }
@@ -32,7 +32,7 @@ class index extends Component {
   }
 
   onChangeregisterNo = event => {
-    this.setState({registerNo: event.target.value})
+    this.setState({registernumber: event.target.value})
   }
 
   onChangename = event => {
@@ -51,6 +51,10 @@ class index extends Component {
     this.setState({department: event.target.value})
   }
 
+  onChangeSem = event => {
+    this.setState({semester: event.target.value})
+  }
+
   onChangereason = event => {
     this.setState({reason: event.target.value})
   }
@@ -58,30 +62,34 @@ class index extends Component {
   onSubmit = async event => {
     event.preventDefault()
     const {
-      registerNo,
+      registernumber,
       name,
       email,
       year,
       department,
       reason,
-      date,
+      semester,
       showSubmitError,
       errorMsg,
     } = this.state
     try {
-      const res = await axios.post('http://localhost:3000/outpass', {
-        registerNo,
-        name,
-        email,
-        year,
-        department,
-        reason,
-      })
+      const res = await axios.post(
+        'https://attractive-erin-ladybug.cyclic.cloud/outpass',
+        {
+          name,
+          registernumber,
+          email,
+          year,
+          department,
+          semester,
+          reason,
+        },
+      )
 
       if (res.data.submission) {
         this.setState({
           showSubmitError: false,
-          registerNo: '',
+          registernumber: '',
           name: '',
           email: '',
           reason: '',
@@ -106,13 +114,13 @@ class index extends Component {
 
   render() {
     const {
-      registerNo,
       name,
+      registernumber,
       email,
       year,
       department,
+      semester,
       reason,
-      date,
       showSubmitError,
       errorMsg,
     } = this.state
@@ -120,7 +128,7 @@ class index extends Component {
     const {state} = location
     const userDetails = state && state.userDetails
     const username = userDetails ? userDetails.username : ''
-    const userType = userDetails ? userDetails.userType : ''
+    const user = userDetails ? userDetails.user : ''
 
     return (
       <div className="container-fluid">
@@ -164,7 +172,7 @@ class index extends Component {
                       pathname: '/history',
                       state: {
                         username,
-                        userType,
+                        user,
                       },
                     }}
                     className="nav-link px-0 align-middle text-white"
@@ -197,7 +205,7 @@ class index extends Component {
                 </label>
                 <input
                   type="number"
-                  value={registerNo}
+                  value={registernumber}
                   onChange={this.onChangeregisterNo}
                   className="form-control"
                   id="inputEmail4"
@@ -238,7 +246,28 @@ class index extends Component {
                   className="form-select"
                 >
                   <option>V</option>
-                  <option defaultValue>IV</option>
+                  <option>IV</option>
+                  <option>III</option>
+                  <option>II</option>
+                  <option>I</option>
+                </select>
+              </div>
+              <div className="col-md-4">
+                <label htmlFor="inputState" className="form-label">
+                  Semester
+                </label>
+                <select
+                  id="inputState"
+                  onChange={this.onChangeSem}
+                  className="form-select"
+                >
+                  <option>X</option>
+                  <option>IX</option>
+                  <option>VII</option>
+                  <option>VI</option>
+                  <option>VI</option>
+                  <option>V</option>
+                  <option>IV</option>
                   <option>III</option>
                   <option>II</option>
                   <option>I</option>
