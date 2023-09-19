@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-icons/font/bootstrap-icons.css'
-import {Link} from 'react-router-dom'
+import {Link, Outlet} from 'react-router-dom'
 import {Component} from 'react'
 import axios from 'axios'
 import Cookies from 'js-cookie'
@@ -204,119 +204,6 @@ class index extends Component {
             <div className="p-2 d-flex justify-content-center shadow">
               <h4>Outpass Management System</h4>
             </div>
-            <form className="row p-3 g-3" onSubmit={this.onSubmit}>
-              <div className="col-md-6">
-                <label htmlFor="inputEmail4" className="form-label">
-                  Register No
-                </label>
-                <input
-                  type="number"
-                  value={registernumber}
-                  onChange={this.onChangeregisterNo}
-                  className="form-control"
-                  id="inputEmail4"
-                />
-              </div>
-              <div className="col-md-6">
-                <label htmlFor="inputPassword4" className="form-label">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="inputPassword4"
-                  value={name}
-                  onChange={this.onChangename}
-                />
-              </div>
-              <div className="col-md-6">
-                <label htmlFor="inputPassword4" className="form-label">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  className="form-control"
-                  value={email}
-                  id="inputPassword4"
-                  onChange={this.onChangeemail}
-                />
-              </div>
-
-              <div className="col-md-6">
-                <label htmlFor="inputState" className="form-label">
-                  Year
-                </label>
-                <select
-                  id="inputState"
-                  onChange={this.onChangeyear}
-                  className="form-select"
-                >
-                  <option>V</option>
-                  <option>IV</option>
-                  <option>III</option>
-                  <option>II</option>
-                  <option>I</option>
-                </select>
-              </div>
-              <div className="col-md-4">
-                <label htmlFor="inputState" className="form-label">
-                  Semester
-                </label>
-                <select
-                  id="inputState"
-                  onChange={this.onChangeSem}
-                  className="form-select"
-                >
-                  <option>X</option>
-                  <option>IX</option>
-                  <option>VII</option>
-                  <option>VI</option>
-                  <option>VI</option>
-                  <option>V</option>
-                  <option>IV</option>
-                  <option>III</option>
-                  <option>II</option>
-                  <option>I</option>
-                </select>
-              </div>
-              <div className="col-md-4">
-                <label htmlFor="inputState" className="form-label">
-                  Department
-                </label>
-                <select
-                  id="inputState"
-                  onChange={this.onChangedepartment}
-                  className="form-select"
-                >
-                  <option>EEE</option>
-                  <option>ECE</option>
-                  <option>CYS</option>
-                  <option>MECH</option>
-                  <option>AI</option>
-                  <option>IOT</option>
-                  <option>CSE</option>
-                </select>
-              </div>
-              <div className="col-12">
-                <label htmlFor="inputAddress" className="form-label">
-                  Reason
-                </label>
-                <textarea
-                  type="text"
-                  className="form-control"
-                  value={reason}
-                  id="inputAddress"
-                  placeholder="Enter Valid Reason"
-                  onChange={this.onChangereason}
-                  col="10"
-                />
-              </div>
-              <div className="col-12 d-flex justify-content-center">
-                <button type="submit" className="btn btn-primary">
-                  Request Outpass
-                </button>
-              </div>
-            </form>
           </div>
         </div>
       </div>

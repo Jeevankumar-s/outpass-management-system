@@ -2,6 +2,7 @@ import {Component} from 'react'
 import Cookies from 'js-cookie'
 import axios from 'axios'
 import {withRouter} from 'react-router-dom'
+import {useUser} from '../userFile/UserContext'
 import './index.css'
 
 class LoginForm extends Component {
@@ -42,7 +43,11 @@ class LoginForm extends Component {
         } else if (res.data.userType === 'staff') {
           user = 'staff'
         }
-        console.log(username, user)
+        // const {setUser, setUsername} = useUser()
+        // const {username, user} = useUser()
+
+        // setUser(user)
+        // setUsername(username)
         history.push('/', {username, user})
 
         this.setState({showSubmitError: false})
