@@ -50,27 +50,53 @@ class index extends Component {
       .catch(error => console.error('Error fetching data:', error))
   }
 
+  //   handleAccept = id => {
+  //     // Make an API call to accept the outpass with the given ID
+  //     axios
+  //       .get(`http://localhost:3000/outpass/${id}/accept`)
+  //       .then(response => {
+  //         if (response.data.success) {
+  //           const mainID = 'MAIN-123456-JohnDoe-1631234567890' // Replace with the generated main ID
+  //           const studentEmail = 'jeevenkumar2003@gmail.com' // Replace with the student's email
+
+  //           // Send an email
+  //           this.sendEmail(studentEmail)
+
+  //           alert(`Accepted outpass with ID: ${id}`)
+  //           // You may want to update your state to reflect the accepted outpass
+  //         } else {
+  //           // Handle the case where the API request was successful but the outpass was not accepted
+  //           alert(`Failed to accept outpass with ID: ${id}`)
+  //         }
+  //       })
+  //       .catch(error => {
+  //         // Handle any errors that occur during the API request
+  //         console.error('Error accepting outpass:', error)
+  //         alert(`An error occurred while accepting outpass with ID: ${id}`)
+  //       })
+  //   }
   handleAccept = id => {
-    // Make an API call to accept the outpass with the given ID
     axios
-      .get(`http://localhost:3000/outpass/${id}/accept`)
+      .post(`https://attractive-erin-ladybug.cyclic.cloud/outpass/${id}/accept`)
       .then(response => {
         if (response.data.success) {
-          const mainID = 'MAIN-123456-JohnDoe-1631234567890' // Replace with the generated main ID
-          const studentEmail = 'jeevenkumar2003@gmail.com' // Replace with the student's email
+          // Update the UI to reflect the accepted outpass
+          this.updateOutpassStatus(id, 'accepted')
 
           // Send an email
-          this.sendEmail(studentEmail)
+          const studentEmail = 'jeevenkumar2003@gmail.com' // Replace with the student's email
+          this.sendEmail(
+            studentEmail,
+            'Outpass Approved',
+            'Your outpass has been approved',
+          )
 
           alert(`Accepted outpass with ID: ${id}`)
-          // You may want to update your state to reflect the accepted outpass
         } else {
-          // Handle the case where the API request was successful but the outpass was not accepted
           alert(`Failed to accept outpass with ID: ${id}`)
         }
       })
       .catch(error => {
-        // Handle any errors that occur during the API request
         console.error('Error accepting outpass:', error)
         alert(`An error occurred while accepting outpass with ID: ${id}`)
       })
@@ -94,10 +120,64 @@ class index extends Component {
   }
 
   handleDecline = id => {
-    alert('Outpass Declined', String(id))
+    // Show a confirmation dialog to the staff member
+    const confirmDecline = window.confirm(
+      'Are you sure you want to decline this outpass?',
+    )
 
-    // Implement the logic for declining an outpass here
-    // You can make an API call to update the outpass status
+    if (confirmDecline) {
+      axios
+        .post(
+          `https://attractive-erin-ladybug.cyclic.cloud/outpass/${id}/decline`,
+        )
+        .then(response => {
+          if (response.data.success) {
+            // Update the UI to reflect the declined outpass
+            this.updateOutpassStatus(id, 'declined')
+
+            // Send a rejection email
+            const studentEmail = 'jeevenkumar2003@gmail.com' // Replace with the student's email
+            const declineReason = 'Your outpass request has been declined.' // You can customize the reason
+            this.sendEmail(studentEmail, 'Outpass Declined', declineReason)
+
+            alert(`Declined outpass with ID: ${id}`)
+          } else {
+            alert(`Failed to decline outpass with ID: ${id}`)
+          }
+        })
+        .catch(error => {
+          console.error('Error declining outpass:', error)
+          alert(`An error occurred while declining outpass with ID: ${id}`)
+        })
+    }
+  }
+
+  updateOutpassStatus(id, status) {
+    // Update the component's state to reflect the accepted or declined outpass
+    const {location: {state: {username, user} = {}} = {}} = this.props
+
+    if (user === 'staff') {
+      const {outpassData} = this.state
+
+      const updatedOutpassData = outpassData.map(item => {
+        if (item.id === id) {
+          return {...item, status}
+        }
+        return item
+      })
+      this.setState({outpassData: updatedOutpassData})
+    } else {
+      const {studentOutpassData} = this.state
+      const updatedStudentOutpassData = studentOutpassData.map(item => {
+        if (item.id === id) {
+          return {...item, status}
+        }
+        return item
+      })
+      this.setState(prevState => ({
+        studentOutpassData: updatedStudentOutpassData,
+      }))
+    }
   }
 
   render() {
@@ -128,6 +208,9 @@ class index extends Component {
                                 Department: {item.department}
                               </p>
                               <p className="card-text">Year: {item.year}</p>
+                              <p className="card-text">
+                                Department: {item.semester}
+                              </p>
                               <p className="card-text">
                                 Requested Time: {item.current_datetime}
                               </p>
@@ -164,6 +247,9 @@ class index extends Component {
                                 Department: {item.department}
                               </p>
                               <p className="card-text">Year: {item.year}</p>
+                              <p className="card-text">
+                                Department: {item.semester}
+                              </p>
                               <p className="card-text">
                                 Requested Time: {item.current_datetime}
                               </p>
