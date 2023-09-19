@@ -33,7 +33,6 @@ class LoginForm extends Component {
           password,
         },
       )
-      console.log(res)
 
       if (res.data.validation) {
         let user = ''

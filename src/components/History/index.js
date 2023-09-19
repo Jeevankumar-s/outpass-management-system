@@ -27,7 +27,6 @@ class index extends Component {
 
   componentDidMount() {
     const {location: {state: {username, user} = {}} = {}} = this.props
-    console.log(username, user)
 
     const apiUrl =
       user === 'student'

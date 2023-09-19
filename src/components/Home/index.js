@@ -118,9 +118,7 @@ class index extends Component {
     // const username = userDetails ? userDetails.username : ''
     // const user = userDetails ? userDetails.user : ''
     const {location} = this.props
-    console.log(location)
     const {username, user} = location.state || {}
-    console.log(username, user)
     return (
       <div className="container-fluid">
         <div className="row flex-nowrap">
