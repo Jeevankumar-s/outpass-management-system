@@ -16,6 +16,7 @@
     "bootstrap-icons": "1.10.5",
     "chalk": "4.1.0",
     "date-fns": "2.30.0",
+    "emailjs-com": "3.2.0",
     "js-cookie": "2.2.1",
     "jsonwebtoken": "8.5.1",
     "nodemailer": "6.9.5",

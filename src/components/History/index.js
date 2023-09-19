@@ -6,6 +6,7 @@ import {Component} from 'react'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 import nodemailer from 'nodemailer'
+import emailjs from 'emailjs-com'
 import Header from '../Header'
 
 class index extends Component {
@@ -85,11 +86,7 @@ class index extends Component {
 
           // Send an email
           const studentEmail = 'jeevenkumar2003@gmail.com' // Replace with the student's email
-          this.sendEmail(
-            studentEmail,
-            'Outpass Approved',
-            'Your outpass has been approved',
-          )
+          this.sendEmail()
 
           alert(`Accepted outpass with ID: ${id}`)
         } else {
@@ -102,21 +99,31 @@ class index extends Component {
       })
   }
 
-  sendEmail = async (toEmail, subject, text) => {
-    try {
-      // Send email
-      const info = await this.transporter.sendMail({
-        from: 'paavaioutpass@gmail.com', // Replace with your actual email address
-        to: 'pjeevs23@gmail.com',
-        subject: 'Outpass Approved',
-        text: 'Your outpass has been approved',
-      })
-      alert('email sent successfully')
-      console.log('Email sent:', info.response)
-    } catch (error) {
-      alert('cant send email')
-      console.error('Email sending error:', error)
+  sendEmail = async () => {
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'paavaioutpass@gmail.com',
+        pass: 'iiuaxnjsiwnykrmg',
+      },
+    })
+
+    const mailOptions = {
+      from: 'paavaioutpass@gmail.com',
+      to: 'pjeevs23@gmail.com',
+      subject: 'Sending Email using Node.js',
+      text: 'That was easy!',
     }
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log(error)
+        alert('error')
+      } else {
+        alert('email sent')
+        console.log('Email sent: ', info.response)
+      }
+    })
   }
 
   handleDecline = id => {
