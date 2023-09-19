@@ -2,7 +2,6 @@ import {Component} from 'react'
 import Cookies from 'js-cookie'
 import axios from 'axios'
 import {withRouter} from 'react-router-dom'
-import {useUser} from '../userFile/UserContext'
 import './index.css'
 
 class LoginForm extends Component {
@@ -48,6 +47,7 @@ class LoginForm extends Component {
 
         // setUser(user)
         // setUsername(username)
+
         history.push('/', {username, user})
 
         this.setState({showSubmitError: false})
