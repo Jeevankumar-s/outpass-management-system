@@ -41,31 +41,6 @@ class index extends Component {
       .catch(error => console.error('Error fetching data:', error))
   }
 
-  //   handleAccept = id => {
-  //     // Make an API call to accept the outpass with the given ID
-  //     axios
-  //       .get(`http://localhost:3000/outpass/${id}/accept`)
-  //       .then(response => {
-  //         if (response.data.success) {
-  //           const mainID = 'MAIN-123456-JohnDoe-1631234567890' // Replace with the generated main ID
-  //           const studentEmail = 'jeevenkumar2003@gmail.com' // Replace with the student's email
-
-  //           // Send an email
-  //           this.sendEmail(studentEmail)
-
-  //           alert(`Accepted outpass with ID: ${id}`)
-  //           // You may want to update your state to reflect the accepted outpass
-  //         } else {
-  //           // Handle the case where the API request was successful but the outpass was not accepted
-  //           alert(`Failed to accept outpass with ID: ${id}`)
-  //         }
-  //       })
-  //       .catch(error => {
-  //         // Handle any errors that occur during the API request
-  //         console.error('Error accepting outpass:', error)
-  //         alert(`An error occurred while accepting outpass with ID: ${id}`)
-  //       })
-  //   }
   handleAccept = id => {
     axios
       .post(`https://attractive-erin-ladybug.cyclic.cloud/outpass/${id}/accept`)
