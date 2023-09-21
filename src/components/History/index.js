@@ -146,7 +146,7 @@ class index extends Component {
                               </p>
                               <p className="card-text">Year: {item.year}</p>
                               <p className="card-text">
-                                Department: {item.semester}
+                                Semester: {item.semester}
                               </p>
                               <p className="card-text">
                                 Requested Time: {item.current_datetime}
@@ -185,7 +185,7 @@ class index extends Component {
                               </p>
                               <p className="card-text">Year: {item.year}</p>
                               <p className="card-text">
-                                Department: {item.semester}
+                                Semester: {item.semester}
                               </p>
                               <p className="card-text">
                                 Requested Time: {item.current_datetime}
