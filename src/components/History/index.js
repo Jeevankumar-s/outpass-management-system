@@ -5,19 +5,9 @@ import {Link, withRouter} from 'react-router-dom'
 import {Component} from 'react'
 import axios from 'axios'
 import Cookies from 'js-cookie'
-import nodemailer from 'nodemailer'
-import emailjs from 'emailjs-com'
 import Header from '../Header'
 
 class index extends Component {
-  transporter = nodemailer.createTransport({
-    service: 'Gmail',
-    auth: {
-      user: 'paavaioutpass@gmail.com', // Replace with your actual email address
-      pass: 'paavaioutpass123', // Replace with your email password
-    },
-  })
-
   constructor() {
     super()
     this.state = {
@@ -83,11 +73,6 @@ class index extends Component {
         if (response.data.success) {
           // Update the UI to reflect the accepted outpass
           this.updateOutpassStatus(id, 'accepted')
-
-          // Send an email
-          const studentEmail = 'jeevenkumar2003@gmail.com' // Replace with the student's email
-          this.sendEmail()
-
           alert(`Accepted outpass with ID: ${id}`)
         } else {
           alert(`Failed to accept outpass with ID: ${id}`)
@@ -97,33 +82,6 @@ class index extends Component {
         console.error('Error accepting outpass:', error)
         alert(`An error occurred while accepting outpass with ID: ${id}`)
       })
-  }
-
-  sendEmail = async () => {
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: 'paavaioutpass@gmail.com',
-        pass: 'iiuaxnjsiwnykrmg',
-      },
-    })
-
-    const mailOptions = {
-      from: 'paavaioutpass@gmail.com',
-      to: 'pjeevs23@gmail.com',
-      subject: 'Sending Email using Node.js',
-      text: 'That was easy!',
-    }
-
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.log(error)
-        alert('error')
-      } else {
-        alert('email sent')
-        console.log('Email sent: ', info.response)
-      }
-    })
   }
 
   handleDecline = id => {
@@ -143,9 +101,6 @@ class index extends Component {
             this.updateOutpassStatus(id, 'declined')
 
             // Send a rejection email
-            const studentEmail = 'jeevenkumar2003@gmail.com' // Replace with the student's email
-            const declineReason = 'Your outpass request has been declined.' // You can customize the reason
-            this.sendEmail(studentEmail, 'Outpass Declined', declineReason)
 
             alert(`Declined outpass with ID: ${id}`)
           } else {
