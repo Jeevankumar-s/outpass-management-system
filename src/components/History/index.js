@@ -13,6 +13,7 @@ class index extends Component {
     this.state = {
       outpassData: [],
       studentOutpassData: [],
+      button: null,
     }
   }
 
@@ -41,6 +42,48 @@ class index extends Component {
       .catch(error => console.error('Error fetching data:', error))
   }
 
+  handleStaffAccept = id => {
+    axios
+      .post(
+        `https://attractive-erin-ladybug.cyclic.cloud/outpass/${id}/staff-approve`,
+      )
+      .then(response => {
+        if (response.data.success) {
+          // Update the UI to reflect the accepted outpass
+          this.updateOutpassStatus(id, 'staff accepted')
+          alert(`Accepted outpass with ID: ${id}`)
+        } else {
+          alert(`Failed to accept outpass with ID: ${id}`)
+        }
+      })
+      .catch(error => {
+        console.error('Error accepting outpass:', error)
+        alert(`An error occurred while accepting outpass with ID: ${id}`)
+      })
+  }
+
+  handleStaffDecline = id => {
+    axios
+      .post(
+        `https://attractive-erin-ladybug.cyclic.cloud/outpass/${id}/staff-decline`,
+      )
+      .then(response => {
+        if (response.data.success) {
+          // Update the UI to reflect the accepted outpass
+          this.updateOutpassStatus(id, 'Hod accepted')
+          alert(`Accepted outpass with ID: ${id}`)
+        } else {
+          alert(`Failed to accept outpass with ID: ${id}`)
+        }
+      })
+      .catch(error => {
+        console.error('Error accepting outpass:', error)
+        alert(`An error occurred while accepting outpass with ID: ${id}`)
+      })
+  }
+
+  // hod accept
+
   handleAccept = id => {
     axios
       .post(`https://attractive-erin-ladybug.cyclic.cloud/outpass/${id}/accept`)
@@ -58,6 +101,8 @@ class index extends Component {
         alert(`An error occurred while accepting outpass with ID: ${id}`)
       })
   }
+
+  // hod decline
 
   handleDecline = id => {
     // Show a confirmation dialog to the staff member
@@ -93,7 +138,7 @@ class index extends Component {
     // Update the component's state to reflect the accepted or declined outpass
     const {location: {state: {username, user} = {}} = {}} = this.props
 
-    if (user === 'staff') {
+    if (user === 'staff' || 'hod') {
       const {outpassData} = this.state
 
       const updatedOutpassData = outpassData.map(item => {
@@ -130,7 +175,7 @@ class index extends Component {
               <h4 className="text-center">History</h4>
               <div className="container">
                 <>
-                  {user === 'staff' ? (
+                  {user === 'staff' || 'hod' ? (
                     <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3">
                       {outpassData.map(item => (
                         <div key={item.id} className="col mb-4">
@@ -152,18 +197,45 @@ class index extends Component {
                                 Requested Time: {item.current_datetime}
                               </p>
                               <p className="card-text">Reason: {item.reason}</p>
-                              <button
-                                onClick={() => this.handleAccept(item.id)}
-                                className="btn btn-success mr-2"
-                              >
-                                Accept
-                              </button>
-                              <button
-                                onClick={() => this.handleDecline(item.id)}
-                                className="btn btn-danger m-3"
-                              >
-                                Decline
-                              </button>
+                              <p className="card-text">Status: {item.status}</p>
+                              {user === 'staff' && (
+                                // Render staff-specific buttons and assign staff-specific functions
+                                <>
+                                  <button
+                                    onClick={() =>
+                                      this.handleStaffAccept(item.id)
+                                    }
+                                    className="btn btn-success mr-2"
+                                  >
+                                    Accept
+                                  </button>
+                                  <button
+                                    onClick={() =>
+                                      this.handleStaffDecline(item.id)
+                                    }
+                                    className="btn btn-danger m-3"
+                                  >
+                                    Decline
+                                  </button>
+                                </>
+                              )}
+                              {user === 'hod' && (
+                                // Render HOD-specific buttons and assign HOD-specific functions
+                                <>
+                                  <button
+                                    onClick={() => this.handleAccept(item.id)}
+                                    className="btn btn-success mr-2"
+                                  >
+                                    Accept
+                                  </button>
+                                  <button
+                                    onClick={() => this.handleDecline(item.id)}
+                                    className="btn btn-danger m-3"
+                                  >
+                                    Decline
+                                  </button>
+                                </>
+                              )}
                             </div>
                           </div>
                         </div>
