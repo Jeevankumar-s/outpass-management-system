@@ -10,6 +10,7 @@ class LoginForm extends Component {
     password: '',
     showSubmitError: false,
     errorMsg: '',
+    user: null,
   }
 
   onChangeUsername = event => {
@@ -33,6 +34,7 @@ class LoginForm extends Component {
           password,
         },
       )
+      console.log(res)
 
       if (res.data.validation) {
         let user = ''
@@ -41,18 +43,10 @@ class LoginForm extends Component {
         } else if (res.data.userType === 'staff') {
           user = 'staff'
         }
-        // const {setUser, setUsername} = useUser()
-        // const {username, user} = useUser()
-
-        // setUser(user)
-        // setUsername(username)
-
-        history.push('/', {username, user})
+        history.replace('/', {username, user})
 
         this.setState({showSubmitError: false})
         Cookies.set('jwt_token', res.data.jeevToken)
-        // console.log(username, user)
-        // console.log(username, userType)
       } else {
         this.setState({showSubmitError: true, errorMsg: res.data.Error})
       }

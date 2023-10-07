@@ -192,6 +192,7 @@ class index extends Component {
                               </p>
 
                               <p className="card-text">Reason: {item.reason}</p>
+                              <p className="card-text">Status: {item.status}</p>
                             </div>
                           </div>
                         </div>
