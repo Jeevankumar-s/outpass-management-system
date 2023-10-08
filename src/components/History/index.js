@@ -14,6 +14,7 @@ class index extends Component {
       outpassData: [],
       studentOutpassData: [],
       button: null,
+      loading: false,
     }
   }
 
@@ -50,7 +51,7 @@ class index extends Component {
       .then(response => {
         if (response.data.success) {
           // Update the UI to reflect the accepted outpass
-          this.updateOutpassStatus(id, 'staff accepted')
+          this.updateOutpassStatus(id, 'Staff Approved')
           alert(`Accepted outpass with ID: ${id}`)
         } else {
           alert(`Failed to accept outpass with ID: ${id}`)
@@ -70,8 +71,8 @@ class index extends Component {
       .then(response => {
         if (response.data.success) {
           // Update the UI to reflect the accepted outpass
-          this.updateOutpassStatus(id, 'Hod accepted')
-          alert(`Accepted outpass with ID: ${id}`)
+          this.updateOutpassStatus(id, 'Staff Declined')
+          alert(`Declined outpass with ID: ${id}`)
         } else {
           alert(`Failed to accept outpass with ID: ${id}`)
         }
@@ -85,12 +86,14 @@ class index extends Component {
   // hod accept
 
   handleAccept = id => {
+    this.setState({loading: true})
     axios
       .post(`https://attractive-erin-ladybug.cyclic.cloud/outpass/${id}/accept`)
       .then(response => {
         if (response.data.success) {
           // Update the UI to reflect the accepted outpass
-          this.updateOutpassStatus(id, 'accepted')
+          this.updateOutpassStatus(id, 'HOD Accepted')
+          this.setState({loading: false})
           alert(`Accepted outpass with ID: ${id}`)
         } else {
           alert(`Failed to accept outpass with ID: ${id}`)
@@ -118,7 +121,7 @@ class index extends Component {
         .then(response => {
           if (response.data.success) {
             // Update the UI to reflect the declined outpass
-            this.updateOutpassStatus(id, 'declined')
+            this.updateOutpassStatus(id, 'HOD Declined')
 
             // Send a rejection email
 
@@ -165,119 +168,138 @@ class index extends Component {
   render() {
     const {location} = this.props
     const {username, user} = location.state || {}
-    const {outpassData, studentOutpassData} = this.state
+    const {outpassData, studentOutpassData, loading} = this.state
+
     return (
       <div className="container-fluid">
         <div className="row flex-nowrap">
           <Header username={username} user={user} />
-          <div className="col p-0 m-0">
-            <div className="p-2 d-flex justify-content-center flex-column shadow">
-              <h4 className="text-center">History</h4>
-              <div className="container">
-                <>
-                  {user === 'staff' || 'hod' ? (
-                    <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3">
-                      {outpassData.map(item => (
-                        <div key={item.id} className="col mb-4">
-                          <div className="card">
-                            <div className="card-body">
-                              <h3 className="card-title">{item.name}</h3>
-                              <p className="card-text">
-                                Register No: {item.registernumber}
-                              </p>
-                              <p className="card-text">Email: {item.email}</p>
-                              <p className="card-text">
-                                Department: {item.department}
-                              </p>
-                              <p className="card-text">Year: {item.year}</p>
-                              <p className="card-text">
-                                Semester: {item.semester}
-                              </p>
-                              <p className="card-text">
-                                Requested Time: {item.current_datetime}
-                              </p>
-                              <p className="card-text">Reason: {item.reason}</p>
-                              <p className="card-text">Status: {item.status}</p>
-                              {user === 'staff' && (
-                                // Render staff-specific buttons and assign staff-specific functions
-                                <>
-                                  <button
-                                    onClick={() =>
-                                      this.handleStaffAccept(item.id)
-                                    }
-                                    className="btn btn-success mr-2"
-                                  >
-                                    Accept
-                                  </button>
-                                  <button
-                                    onClick={() =>
-                                      this.handleStaffDecline(item.id)
-                                    }
-                                    className="btn btn-danger m-3"
-                                  >
-                                    Decline
-                                  </button>
-                                </>
-                              )}
-                              {user === 'hod' && (
-                                // Render HOD-specific buttons and assign HOD-specific functions
-                                <>
-                                  <button
-                                    onClick={() => this.handleAccept(item.id)}
-                                    className="btn btn-success mr-2"
-                                  >
-                                    Accept
-                                  </button>
-                                  <button
-                                    onClick={() => this.handleDecline(item.id)}
-                                    className="btn btn-danger m-3"
-                                  >
-                                    Decline
-                                  </button>
-                                </>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3">
-                      {studentOutpassData.map(item => (
-                        <div key={item.id} className="col mb-4">
-                          <div className="card">
-                            <div className="card-body">
-                              <h3 className="card-title">{item.name}</h3>
-                              <p className="card-text">
-                                Register No: {item.registernumber}
-                              </p>
-                              <p className="card-text">Email: {item.email}</p>
-                              <p className="card-text">
-                                Department: {item.department}
-                              </p>
-                              <p className="card-text">Year: {item.year}</p>
-                              <p className="card-text">
-                                Semester: {item.semester}
-                              </p>
-                              <p className="card-text">
-                                Requested Time: {item.current_datetime}
-                              </p>
-
-                              <p className="card-text">Reason: {item.reason}</p>
-                              <p className="card-text">Status: {item.status}</p>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </>
+          {loading ? (
+            <div className="col p-0 m-0 d-flex align-items-center justify-content-center">
+              <div className="spinner-border text-primary" role="status">
+                <span className="visually-hidden">Loading...</span>
               </div>
             </div>
-          </div>
+          ) : (
+            <div className="col p-0 m-0">
+              <div className="p-2 d-flex justify-content-center flex-column shadow">
+                <h4 className="text-center">History</h4>
+                <div className="container">
+                  <>
+                    {user === 'staff' || user === 'hod' ? (
+                      <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3">
+                        {outpassData.map(item => (
+                          <div key={item.id} className="col mb-4">
+                            <div className="card">
+                              <div className="card-body">
+                                <h3 className="card-title">{item.name}</h3>
+                                <p className="card-text">
+                                  Register No: {item.registernumber}
+                                </p>
+                                <p className="card-text">Email: {item.email}</p>
+                                <p className="card-text">
+                                  Department: {item.department}
+                                </p>
+                                <p className="card-text">Year: {item.year}</p>
+                                <p className="card-text">
+                                  Semester: {item.semester}
+                                </p>
+                                <p className="card-text">
+                                  Requested Time: {item.current_datetime}
+                                </p>
+                                <p className="card-text">
+                                  Reason: {item.reason}
+                                </p>
+                                <p className="card-text">
+                                  Status: {item.status}
+                                </p>
+                                {user === 'staff' && (
+                                  // Render staff-specific buttons and assign staff-specific functions
+                                  <>
+                                    <button
+                                      onClick={() =>
+                                        this.handleStaffAccept(item.id)
+                                      }
+                                      className="btn btn-success mr-2"
+                                    >
+                                      Accept
+                                    </button>
+                                    <button
+                                      onClick={() =>
+                                        this.handleStaffDecline(item.id)
+                                      }
+                                      className="btn btn-danger m-3"
+                                    >
+                                      Decline
+                                    </button>
+                                  </>
+                                )}
+                                {user === 'hod' && (
+                                  // Render HOD-specific buttons and assign HOD-specific functions
+                                  <>
+                                    <button
+                                      onClick={() => this.handleAccept(item.id)}
+                                      className="btn btn-success mr-2"
+                                    >
+                                      Accept
+                                    </button>
+                                    <button
+                                      onClick={() =>
+                                        this.handleDecline(item.id)
+                                      }
+                                      className="btn btn-danger m-3"
+                                    >
+                                      Decline
+                                    </button>
+                                  </>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3">
+                        {studentOutpassData.map(item => (
+                          <div key={item.id} className="col mb-4">
+                            <div className="card">
+                              <div className="card-body">
+                                <h3 className="card-title">{item.name}</h3>
+                                <p className="card-text">
+                                  Register No: {item.registernumber}
+                                </p>
+                                <p className="card-text">Email: {item.email}</p>
+                                <p className="card-text">
+                                  Department: {item.department}
+                                </p>
+                                <p className="card-text">Year: {item.year}</p>
+                                <p className="card-text">
+                                  Semester: {item.semester}
+                                </p>
+                                <p className="card-text">
+                                  Requested Time: {item.current_datetime}
+                                </p>
+                                <p className="card-text">
+                                  Reason: {item.reason}
+                                </p>
+                                <p className="card-text">
+                                  Status: {item.status}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     )
   }
 }
+
 export default withRouter(index)

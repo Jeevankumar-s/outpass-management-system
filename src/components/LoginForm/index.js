@@ -40,12 +40,14 @@ class LoginForm extends Component {
         let user = ''
         if (res.data.userType === 'student') {
           user = 'student'
+          history.replace('/', {username, user})
         } else if (res.data.userType === 'staff') {
           user = 'staff'
+          history.replace('/history', {username, user})
         } else {
           user = 'hod'
+          history.replace('/history', {username, user})
         }
-        history.replace('/', {username, user})
         this.setState({showSubmitError: false})
         Cookies.set('jwt_token', res.data.jeevToken)
       } else {
